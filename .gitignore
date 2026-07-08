@@ -1,0 +1,11 @@
+# Ignore environment/secret files
+.env
+*.key
+
+# Ignore OS junk
+.DS_Store
+Thumbs.db
+
+# Ignore common junk folders
+node_modules/
+I do not know what i am doing but i am trying.
