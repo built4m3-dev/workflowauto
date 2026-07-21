@@ -12,6 +12,7 @@ Everything (fonts, QR generator, styling) is embedded in a single file —
   location) saves straight to the scanner's phone.
 - **Tap "Save Contact"** → downloads a `.vcf` that imports into any contacts app.
 - **Tap Email / Call** → opens the phone's mail or dialer.
+- **Add to Apple Wallet** → an optional signed pass; build it in [`wallet/`](./wallet/README.md).
 
 ## ✏️ Edit your details (30 seconds)
 
@@ -64,6 +65,16 @@ const CONFIG = {
    `https://<user>.github.io/workflowauto/business-card/`.
 
 Any static host (Netlify drop, Cloudflare Pages, etc.) works too — it's one file.
+
+## 🍎 Add to Apple Wallet
+
+The card can show an **"Add to Apple Wallet"** button that installs a pass
+carrying your contact details and a scannable QR. Apple only accepts passes
+signed with your own Apple Developer certificate, so it's a one-time build step —
+a ready-to-run signer and full instructions live in
+**[`wallet/`](./wallet/README.md)**. Once you've built and hosted the pass, set
+`walletPass` in the CONFIG and the button appears automatically. (Until then it
+stays hidden — no dead button.)
 
 ## 🔧 Under the hood
 

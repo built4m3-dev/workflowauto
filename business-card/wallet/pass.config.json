@@ -1,0 +1,30 @@
+{
+  "_comment": "Edit the values below, then run: node build-pass.mjs (see README.md). Keep contact details in sync with ../index.html.",
+
+  "apple": {
+    "passTypeIdentifier": "pass.org.CHANGE-ME.businesscard",
+    "teamIdentifier": "CHANGE-ME-TEAMID",
+    "organizationName": "Hidalgo County Sheriff's Combined Auto Theft Task Force"
+  },
+
+  "serialNumber": "daniel-casarez-001",
+
+  "contact": {
+    "firstName": "Daniel",
+    "lastName": "Casarez",
+    "role": "Task Force Commander",
+    "agency": "Hidalgo County Sheriff's Combined Auto Theft Task Force",
+    "brand": "Hidalgo Co. Sheriff",
+    "email": "danielr.casarez@hidalgoso.org",
+    "phones": [
+      { "label": "Cell",   "number": "956-378-8082" },
+      { "label": "Office", "number": "956-383-8114" }
+    ]
+  },
+
+  "colors": {
+    "background": "rgb(13, 14, 17)",
+    "foreground": "rgb(236, 231, 219)",
+    "label": "rgb(233, 162, 59)"
+  }
+}

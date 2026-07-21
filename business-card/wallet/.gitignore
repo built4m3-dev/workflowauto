@@ -1,0 +1,7 @@
+# NEVER commit signing material or built passes
+certs/
+*.pem
+*.p12
+*.cer
+*.pkpass
+.build/
