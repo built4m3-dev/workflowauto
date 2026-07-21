@@ -32,7 +32,7 @@ const CONFIG = {
   email     : "danielr.casarez@hidalgoso.org",
   phone     : "956 587 1742",
   website   : "",                      // e.g. "https://www.hidalgocounty.us"
-  location  : "Hidalgo County, TX",
+  location  : "",                      // e.g. "Hidalgo County, TX"
 
   socials   : [
     // { label:"LINKEDIN", url:"https://linkedin.com/in/…" },
