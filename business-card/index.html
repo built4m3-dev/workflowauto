@@ -5,6 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Daniel Casarez — Digital Business Card</title>
 <meta name="description" content="Digital contact card for Daniel Casarez, Task Force Commander, Hidalgo County Sheriff's Combined Auto Theft Task Force. Scan the QR code to save the contact.">
+<!-- Home-screen shortcut ("install") support. When this file is hosted alongside
+     the icons + manifest below, adding it to an iPhone/Android home screen gives
+     a branded icon that launches the card full-screen. -->
+<meta name="theme-color" content="#0d0e11">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Daniel Casarez">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
 <!--CARD_BODY_START-->
 <style>
 /* ============================================================
@@ -204,8 +215,8 @@ body::before{ /* vignette + amber flecks over the field */
 .btn:active{transform:translateY(0)}
 .btn--primary{background:linear-gradient(180deg,#F5C070,var(--amber));color:#231502;border-color:#8a5c12}
 .btn--primary:hover,.btn--primary:focus-visible{box-shadow:0 8px 24px -8px rgba(233,162,59,.7)}
-.btn--wallet{flex:1 1 100%;background:#050506;border-color:#3a3d44;color:var(--bone)}
-.btn--wallet:hover,.btn--wallet:focus-visible{border-color:var(--amber);color:var(--amber-hi)}
+.btn--install{flex:1 1 100%;background:#050506;border-color:#3a3d44;color:var(--bone)}
+.btn--install:hover,.btn--install:focus-visible{border-color:var(--amber);color:var(--amber-hi)}
 .btn svg{width:14px;height:14px}
 
 /* ---- footer ---- */
@@ -217,6 +228,21 @@ body::before{ /* vignette + amber flecks over the field */
   font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:11px 16px;border-radius:2px;
   box-shadow:0 12px 30px -12px rgba(0,0,0,.9);opacity:0;pointer-events:none;transition:opacity .25s ease,transform .25s ease}
 #toast.on{opacity:1;transform:translate(-50%,0)}
+
+/* ---- add-to-home-screen sheet ---- */
+#a2hs-sheet{position:fixed;inset:0;z-index:30;display:none;align-items:flex-end;justify-content:center;
+  background:rgba(0,0,0,.62)}
+#a2hs-sheet.on{display:flex}
+.sheet{width:100%;max-width:392px;background:linear-gradient(180deg,var(--card-2),var(--card));
+  border:1px solid var(--steel);border-bottom:0;border-radius:10px 10px 0 0;
+  padding:20px 22px calc(24px + env(safe-area-inset-bottom));box-shadow:0 -20px 50px -20px rgba(0,0,0,.9)}
+.sheet h4{font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.02em;
+  font-size:20px;margin:0 0 6px;color:var(--bone)}
+.sheet p{margin:0 0 16px;font-size:12.5px;line-height:1.65;color:var(--bone-dim)}
+.sheet p b{color:var(--amber-hi);font-weight:600}
+.sheet .share-ico{display:inline-block;vertical-align:-2px}
+@media (prefers-reduced-motion:no-preference){ #a2hs-sheet.on .sheet{animation:sheetUp .28s ease both} }
+@keyframes sheetUp{from{transform:translateY(100%)}to{transform:none}}
 
 /* entrance */
 @media (prefers-reduced-motion:no-preference){
@@ -276,10 +302,10 @@ body::before{ /* vignette + amber flecks over the field */
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.4-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2Z"/></svg>
       Call
     </a>
-    <a class="btn btn--wallet hidden" id="wallet-btn" href="#">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5.5" width="18" height="13" rx="2.6"/><path d="M3 10h18"/><path d="M7 14.5h4"/></svg>
-      Add to Apple Wallet
-    </a>
+    <button class="btn btn--install hidden" id="a2hs-btn" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2.5" width="14" height="19" rx="2.6"/><path d="M12 8.4v6"/><path d="M9 11.4h6"/></svg>
+      Add to Home Screen
+    </button>
   </div>
 
   <div class="foot">
@@ -288,6 +314,14 @@ body::before{ /* vignette + amber flecks over the field */
 </main>
 
 <div id="toast" role="status" aria-live="polite"></div>
+
+<div id="a2hs-sheet" role="dialog" aria-modal="true" aria-label="Add to Home Screen">
+  <div class="sheet">
+    <h4>Add to Home Screen</h4>
+    <p id="a2hs-body"></p>
+    <button class="btn" id="a2hs-close" type="button">Got it</button>
+  </div>
+</div>
 
 <script>//---------------------------------------------------------------------
 //
@@ -2617,10 +2651,6 @@ const CONFIG = {
     // { label:"LINKEDIN", url:"https://linkedin.com/in/…" },
   ],
 
-  // Paste your hosted .pkpass URL here to reveal the "Add to Apple Wallet"
-  // button. Build the pass with wallet/build-pass.mjs — see wallet/README.md.
-  walletPass : "",
-
   qrEncodes : "vcard"             // "vcard" = scan saves contact · "website" = scan opens your site
 };
 /* ========================= end config ========================= */
@@ -2660,7 +2690,6 @@ const CONFIG = {
   /* ---- action buttons ---- */
   if(C.email) $("email-btn").href = "mailto:"+C.email;
   if(phones.length){ var cb=$("call-btn"); cb.href=telHref(phones[0].number); cb.classList.remove("hidden"); }
-  if(C.walletPass){ var wb=$("wallet-btn"); wb.href=C.walletPass; wb.classList.remove("hidden"); }
 
   function normUrl(u){ return /^https?:\/\//.test(u) ? u : "https://"+u; }
 
@@ -2708,6 +2737,29 @@ const CONFIG = {
 
   var tt;
   function toast(msg){ var t=$("toast"); t.textContent=msg; t.classList.add("on"); clearTimeout(tt); tt=setTimeout(function(){t.classList.remove("on");},2600); }
+
+  /* ---- Add to Home Screen ("shortcut" — free, no app store, no dev account) ---- */
+  (function install(){
+    var btn=$("a2hs-btn"), sheet=$("a2hs-sheet");
+    var standalone = (window.matchMedia && matchMedia("(display-mode: standalone)").matches) || window.navigator.standalone===true;
+    if(standalone) return;                          // already added → keep the button hidden
+    var ua=navigator.userAgent||"";
+    var isIOS = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints>1);
+    var deferred=null;
+    window.addEventListener("beforeinstallprompt", function(e){ e.preventDefault(); deferred=e; });
+    btn.classList.remove("hidden");
+    btn.addEventListener("click", function(){
+      if(deferred){ deferred.prompt(); deferred=null; return; }   // Android/Chrome: native install prompt
+      $("a2hs-body").innerHTML = isIOS
+        ? 'In Safari, tap the <b>Share</b> button '
+          + '<span class="share-ico"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--amber-hi)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13"/><path d="M8 7l4-4 4 4"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg></span>'
+          + ' then choose <b>&ldquo;Add to Home Screen.&rdquo;</b>'
+        : 'Open your browser menu <b>(&#8942;)</b>, then choose <b>&ldquo;Add to Home screen&rdquo;</b> or <b>&ldquo;Install app.&rdquo;</b>';
+      sheet.classList.add("on");
+    });
+    $("a2hs-close").addEventListener("click", function(){ sheet.classList.remove("on"); });
+    sheet.addEventListener("click", function(e){ if(e.target===sheet) sheet.classList.remove("on"); });
+  })();
 
   /* ---- grain field (canvas noise) ---- */
   (function grain(){

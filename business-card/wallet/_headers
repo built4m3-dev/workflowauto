@@ -1,7 +1,0 @@
-# Netlify / Cloudflare Pages headers file.
-# Ensures the pass downloads with the MIME type iOS needs to open it in Wallet.
-# (Drop this file, your .pkpass, and index.html into a Netlify deploy.)
-
-/*.pkpass
-  Content-Type: application/vnd.apple.pkpass
-  Content-Disposition: attachment

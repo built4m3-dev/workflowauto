@@ -4,15 +4,17 @@ A self-contained, black/tactical digital contact card with a scannable QR code
 for **Daniel Casarez — Task Force Commander, Hidalgo County Sheriff's Combined
 Auto Theft Task Force**.
 
-Everything (fonts, QR generator, styling) is embedded in a single file —
-**no internet connection, build step, or dependencies required.**
+Everything (fonts, QR generator, styling) is embedded in `index.html` — **no
+internet connection, build step, or dependencies required.** (A few small icon
+files sit alongside it only to give the "Add to Home Screen" shortcut a branded icon.)
 
 - **File:** [`index.html`](./index.html)
-- **Scan the QR code** → the full contact (name, title, agency, phone, email,
-  location) saves straight to the scanner's phone.
+- **Scan the QR code** → the full contact (name, title, agency, both phone
+  numbers, email) saves straight to the scanner's phone.
 - **Tap "Save Contact"** → downloads a `.vcf` that imports into any contacts app.
 - **Tap Email / Call** → opens the phone's mail or dialer.
-- **Add to Apple Wallet** → an optional signed pass; build it in [`wallet/`](./wallet/README.md).
+- **Add to Home Screen** → installs the card as a tappable icon that opens
+  full-screen like an app (free, iPhone & Android — no developer account).
 
 ## ✏️ Edit your details (30 seconds)
 
@@ -66,15 +68,23 @@ const CONFIG = {
 
 Any static host (Netlify drop, Cloudflare Pages, etc.) works too — it's one file.
 
-## 🍎 Add to Apple Wallet
+## 📲 Add to Home Screen (the free "shortcut")
 
-The card can show an **"Add to Apple Wallet"** button that installs a pass
-carrying your contact details and a scannable QR. Apple only accepts passes
-signed with your own Apple Developer certificate, so it's a one-time build step —
-a ready-to-run signer and full instructions live in
-**[`wallet/`](./wallet/README.md)**. Once you've built and hosted the pass, set
-`walletPass` in the CONFIG and the button appears automatically. (Until then it
-stays hidden — no dead button.)
+The card has an **"Add to Home Screen"** button — a free way to keep it one tap
+away on a phone, with no Apple Developer account or fee. Tapping it:
+
+- **iPhone (Safari):** shows the steps — Share button → *Add to Home Screen*.
+- **Android (Chrome):** fires the native install prompt where available,
+  otherwise shows the menu steps.
+
+Once added, the card opens **full-screen like an app**. For the branded
+home-screen icon, host this folder so the phone can load `apple-touch-icon.png`,
+`icon-192.png`, `icon-512.png`, and `manifest.webmanifest` next to `index.html`
+(GitHub Pages / Netlify — see above). Opened as a lone file it still installs,
+just with a generic icon.
+
+> Prefer an entry in the iOS **Shortcuts** app instead? That's also free — just
+> ask; Add to Home Screen is the simpler, cross-platform option.
 
 ## 🔧 Under the hood
 
