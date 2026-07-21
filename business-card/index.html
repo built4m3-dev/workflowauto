@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Daniel Casarez — Digital Business Card</title>
-<meta name="description" content="Digital business card for Daniel Casarez, WorkflowAuto. Scan the QR code to save the contact.">
+<meta name="description" content="Digital contact card for Daniel Casarez, Task Force Commander, Hidalgo County Sheriff's Combined Auto Theft Task Force. Scan the QR code to save the contact.">
 <!--CARD_BODY_START-->
 <style>
 /* ============================================================
@@ -140,8 +140,7 @@ body::before{ /* vignette + amber flecks over the field */
 .head .brand{color:var(--amber);font-weight:600}
 .status{display:inline-flex;align-items:center;gap:6px;color:var(--bone-dim)}
 .dot{width:6px;height:6px;border-radius:50%;background:var(--amber);
-  box-shadow:0 0 0 0 rgba(233,162,59,.6);animation:pulse 2.4s ease-out infinite}
-@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(233,162,59,.55)}70%{box-shadow:0 0 0 7px rgba(233,162,59,0)}100%{box-shadow:0 0 0 0 rgba(233,162,59,0)}}
+  box-shadow:0 0 6px 0 rgba(233,162,59,.5)}
 
 /* ---- name block ---- */
 .id{margin-top:20px}
@@ -208,9 +207,7 @@ body::before{ /* vignette + amber flecks over the field */
 .btn svg{width:14px;height:14px}
 
 /* ---- footer ---- */
-.foot{margin-top:18px;display:flex;justify-content:space-between;gap:10px;
-  font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-2)}
-.foot .sn{color:var(--muted)}
+.foot{margin-top:18px;font-size:9px;letter-spacing:.06em;line-height:1.55;color:var(--muted-2)}
 
 /* ---- toast ---- */
 #toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,20px);z-index:20;
@@ -238,15 +235,15 @@ body::before{ /* vignette + amber flecks over the field */
   <div class="card__frame" aria-hidden="true"></div>
 
   <div class="head">
-    <span class="brand" id="h-brand">WORKFLOWAUTO</span>
-    <span class="status"><span class="dot" aria-hidden="true"></span><span id="h-status">SYS · ONLINE</span></span>
+    <span class="brand" id="h-brand">HIDALGO CO. SHERIFF</span>
+    <span class="status" id="status"><span class="dot" aria-hidden="true"></span><span id="h-status">Texas</span></span>
   </div>
 
   <header class="id">
-    <p class="eyebrow" id="i-eyebrow">Automation Systems</p>
+    <p class="eyebrow" id="i-eyebrow">Combined Auto Theft Task Force</p>
     <h1 class="name" id="i-name">Daniel Casarez</h1>
-    <p class="role" id="i-role">Workflow Automation Specialist</p>
-    <p class="tagline" id="i-tag">I build n8n automations that capture leads and run the busywork for med-spas &amp; law offices.</p>
+    <p class="role" id="i-role">Task Force Commander</p>
+    <p class="tagline hidden" id="i-tag"></p>
   </header>
 
   <div class="rule" aria-hidden="true"></div>
@@ -280,8 +277,7 @@ body::before{ /* vignette + amber flecks over the field */
   </div>
 
   <div class="foot">
-    <span id="f-note">© 2026 WorkflowAuto</span>
-    <span class="sn" id="f-sn">REF·4477</span>
+    <span id="f-note">Hidalgo County Sheriff&#39;s Combined Auto Theft Task Force</span>
   </div>
 </main>
 
@@ -2595,20 +2591,21 @@ var qrcode = function() {
 const CONFIG = {
   firstName : "Daniel",
   lastName  : "Casarez",
-  role      : "Workflow Automation Specialist",
-  company   : "WorkflowAuto",
-  eyebrow   : "Automation Systems",   // small label above your name
-  tagline   : "I build n8n automations that capture leads and run the busywork for med-spas & law offices.",
+  role      : "Task Force Commander",
+  company   : "Hidalgo County Sheriff's Combined Auto Theft Task Force", // full name — saved into the contact
+  brand     : "Hidalgo Co. Sheriff",   // short label, top-left of the card
+  eyebrow   : "Combined Auto Theft Task Force",
+  region    : "Texas",                 // short label, top-right of the card
+  tagline   : "",                      // optional line under your title
 
-  email     : "casarezd4477@yahoo.com",
-  phone     : "",                 // e.g. "+1 555 123 4567"
-  website   : "",                 // e.g. "https://workflowauto.io"
-  location  : "",                 // e.g. "Austin, TX"
+  email     : "danielr.casarez@hidalgoso.org",
+  phone     : "956 587 1742",
+  website   : "",                      // e.g. "https://www.hidalgocounty.us"
+  location  : "Hidalgo County, TX",
 
   // optional social links (label shows in the spec list)
   socials   : [
     // { label:"LINKEDIN", url:"https://linkedin.com/in/…" },
-    // { label:"INSTAGRAM", url:"https://instagram.com/…" },
   ],
 
   qrEncodes : "vcard"             // "vcard" = scan saves contact · "website" = scan opens your site
@@ -2625,10 +2622,10 @@ const CONFIG = {
   /* ---- text fields ---- */
   if(fullName) $("i-name").textContent = fullName;
   document.title = (fullName||"Digital") + " — Digital Business Card";
-  setText("i-role", C.role); setText("i-tag", C.tagline);
-  setText("i-eyebrow", C.eyebrow || "Automation Systems");
-  if(C.company){ $("h-brand").textContent = C.company.toUpperCase(); $("f-note").textContent = "© " + new Date().getFullYear() + " " + C.company; }
-  var digits = (C.email.match(/\d+/)||[""])[0]; $("f-sn").textContent = "REF·" + (digits ? digits.slice(-4) : "0001");
+  setText("i-role", C.role); setText("i-tag", C.tagline); setText("i-eyebrow", C.eyebrow);
+  $("h-brand").textContent = (C.brand || C.company || "").toUpperCase();
+  if(C.region){ $("h-status").textContent = C.region; } else { $("status").style.display = "none"; }
+  setText("f-note", C.company);
 
   function setText(id,val){ var el=$(id); if(!el)return; if(val){el.textContent=val;el.classList.remove("hidden");} else {el.classList.add("hidden");} }
 
