@@ -2599,7 +2599,10 @@ const CONFIG = {
   tagline   : "",                      // optional line under your title
 
   email     : "danielr.casarez@hidalgoso.org",
-  phone     : "956 587 1742",
+  phones    : [                        // list any number of phones; first one is what "Call" dials
+    { label:"Cell",   number:"956-378-8082" },
+    { label:"Office", number:"956-383-8114" },
+  ],
   website   : "",                      // e.g. "https://www.hidalgocounty.us"
   location  : "",                      // e.g. "Hidalgo County, TX"
 
@@ -2616,6 +2619,8 @@ const CONFIG = {
   "use strict";
   var C = CONFIG;
   var fullName = [C.firstName, C.lastName].filter(Boolean).join(" ").trim();
+  var phones = (C.phones && C.phones.length) ? C.phones : (C.phone ? [{label:"Phone", number:C.phone}] : []);
+  var telHref = function(num){ return "tel:"+String(num).replace(/[^\d+]/g,""); };
   var $ = function(id){ return document.getElementById(id); };
   var esc = function(s){ return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); };
 
@@ -2632,7 +2637,7 @@ const CONFIG = {
   /* ---- spec list rows ---- */
   var rows = [];
   if(C.email)   rows.push({k:"Email", v:C.email, href:"mailto:"+C.email});
-  if(C.phone)   rows.push({k:"Phone", v:C.phone, href:"tel:"+C.phone.replace(/[^\d+]/g,"")});
+  phones.forEach(function(p){ if(p&&p.number) rows.push({k:p.label||"Phone", v:p.number, href:telHref(p.number)}); });
   if(C.website) rows.push({k:"Web",   v:C.website.replace(/^https?:\/\//,"").replace(/\/$/,""), href:normUrl(C.website)});
   if(C.location)rows.push({k:"Loc",   v:C.location, href:"https://maps.google.com/?q="+encodeURIComponent(C.location)});
   (C.socials||[]).forEach(function(s){ if(s&&s.url) rows.push({k:s.label||"Link", v:s.url.replace(/^https?:\/\//,"").replace(/\/$/,""), href:normUrl(s.url)}); });
@@ -2644,7 +2649,7 @@ const CONFIG = {
 
   /* ---- action buttons ---- */
   if(C.email) $("email-btn").href = "mailto:"+C.email;
-  if(C.phone){ var cb=$("call-btn"); cb.href="tel:"+C.phone.replace(/[^\d+]/g,""); cb.classList.remove("hidden"); }
+  if(phones.length){ var cb=$("call-btn"); cb.href=telHref(phones[0].number); cb.classList.remove("hidden"); }
 
   function normUrl(u){ return /^https?:\/\//.test(u) ? u : "https://"+u; }
 
@@ -2655,7 +2660,7 @@ const CONFIG = {
     L.push("FN:"+fullName);
     if(C.company) L.push("ORG:"+C.company);
     if(C.role)    L.push("TITLE:"+C.role);
-    if(C.phone)   L.push("TEL;TYPE=CELL:"+C.phone);
+    phones.forEach(function(p){ if(p&&p.number){ var t=/off|work/i.test(p.label||"")?"WORK":/cell|mob/i.test(p.label||"")?"CELL":"VOICE"; L.push("TEL;TYPE="+t+":"+p.number); } });
     if(C.email)   L.push("EMAIL;TYPE=INTERNET:"+C.email);
     if(C.website) L.push("URL:"+normUrl(C.website));
     if(C.location)L.push("ADR;TYPE=WORK:;;"+C.location+";;;;");

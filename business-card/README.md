@@ -30,7 +30,10 @@ const CONFIG = {
   tagline   : "",                      // optional line under your title
 
   email     : "danielr.casarez@hidalgoso.org",
-  phone     : "956 587 1742",
+  phones    : [                        // first number is what the "Call" button dials
+    { label:"Cell",   number:"956-378-8082" },
+    { label:"Office", number:"956-383-8114" },
+  ],
   website   : "",                      // e.g. "https://www.hidalgocounty.us"
   location  : "",                      // e.g. "Hidalgo County, TX"
 
