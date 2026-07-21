@@ -285,7 +285,7 @@ body::before{ /* vignette + amber flecks over the field */
     </div>
     <div class="scan__cap">
       <p class="lead">Scan to<br>Save</p>
-      <p>Point a camera at the code <span class="arrow">&rarr;</span> add me straight to your contacts.</p>
+      <p id="scan-sub">Point any phone camera here <span class="arrow">&rarr;</span> it opens my card, then tap Save Contact.</p>
     </div>
   </section>
 
@@ -2651,7 +2651,12 @@ const CONFIG = {
     // { label:"LINKEDIN", url:"https://linkedin.com/in/…" },
   ],
 
-  qrEncodes : "vcard"             // "vcard" = scan saves contact · "website" = scan opens your site
+  // Public web address where this card is hosted. With qrEncodes "url" the QR
+  // points HERE — a link, not raw contact data — so phone cameras open the card
+  // instead of latching onto a phone number. Update if you host it elsewhere.
+  cardUrl   : "https://built4m3-dev.github.io/workflowauto/business-card/",
+
+  qrEncodes : "url"   // "url" = QR opens cardUrl (fixes cameras grabbing a number) · "vcard" = QR holds the raw contact · "website" = QR opens your website
 };
 /* ========================= end config ========================= */
 
@@ -2711,7 +2716,9 @@ const CONFIG = {
 
   /* ---- QR (dark modules on bone plate for reliable scanning) ---- */
   function drawQR(){
-    var payload = C.qrEncodes==="website" && C.website ? normUrl(C.website) : vcard();
+    var payload = C.qrEncodes==="url" && C.cardUrl ? C.cardUrl
+                : C.qrEncodes==="website" && C.website ? normUrl(C.website)
+                : vcard();
     try{
       var qr = qrcode(0,"M"); qr.addData(payload); qr.make();
       var n = qr.getModuleCount(), q = 4, size = n + q*2, d = "";   // q = 4-module quiet zone
@@ -2723,6 +2730,13 @@ const CONFIG = {
     }catch(e){ $("qr").innerHTML = '<p style="font:10px monospace;color:#0b0b0c;padding:6px;margin:0">QR too long — shorten details.</p>'; }
   }
   drawQR();
+
+  /* ---- scan caption matches the QR mode ---- */
+  (function(){ var s=$("scan-sub"); if(!s) return;
+    if(C.qrEncodes==="vcard") s.innerHTML='Point a camera at the code <span class="arrow">&rarr;</span> add me straight to your contacts.';
+    else if(C.qrEncodes==="website") s.innerHTML='Point a camera at the code <span class="arrow">&rarr;</span> it opens my website.';
+    else s.innerHTML='Point any phone camera here <span class="arrow">&rarr;</span> it opens my card, then tap Save Contact.';
+  })();
 
   /* ---- Save Contact (.vcf download) ---- */
   $("save").addEventListener("click", function(){

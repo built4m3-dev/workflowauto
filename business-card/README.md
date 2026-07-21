@@ -9,8 +9,9 @@ internet connection, build step, or dependencies required.** (A few small icon
 files sit alongside it only to give the "Add to Home Screen" shortcut a branded icon.)
 
 - **File:** [`index.html`](./index.html)
-- **Scan the QR code** → the full contact (name, title, agency, both phone
-  numbers, email) saves straight to the scanner's phone.
+- **Scan the QR code** → opens this card in the scanner's browser; they tap
+  **Save Contact** to add you. The QR holds a *link*, not your raw number — so
+  phone cameras open the card instead of latching onto a phone number.
 - **Tap "Save Contact"** → downloads a `.vcf` that imports into any contacts app.
 - **Tap Email / Call** → opens the phone's mail or dialer.
 - **Add to Home Screen** → installs the card as a tappable icon that opens
@@ -44,7 +45,8 @@ const CONFIG = {
     // { label:"LINKEDIN", url:"https://linkedin.com/in/…" },
   ],
 
-  qrEncodes : "vcard"        // "vcard" = scan saves contact · "website" = scan opens a site
+  cardUrl   : "https://built4m3-dev.github.io/workflowauto/business-card/",  // where the QR points
+  qrEncodes : "url"          // "url" = QR opens cardUrl (cameras can't grab a number) · "vcard" = QR holds the raw contact · "website" = QR opens your website
 };
 ```
 
@@ -59,14 +61,20 @@ const CONFIG = {
 2. **Send the file** — `index.html` works offline; anyone can open it in a browser.
 3. **Show the QR** — pull the card up on your phone and let people scan it.
 
-## 🌐 Publish it as a link (free, via GitHub Pages)
+## 🌐 Publish it as a link (free, via GitHub Pages) — required for the QR
 
-1. Push this repo to GitHub (already on your branch).
-2. Repo **Settings → Pages → Build from branch**, pick your branch, folder `/`.
-3. Your card goes live at
-   `https://<user>.github.io/workflowauto/business-card/`.
+The QR points at **`cardUrl`**, so the card must be live at that address for
+scanning to work. To turn on GitHub Pages:
 
-Any static host (Netlify drop, Cloudflare Pages, etc.) works too — it's one file.
+1. Merge this branch into **`main`** (your default branch).
+2. Repo **Settings → Pages → Build and deployment → Source: Deploy from a
+   branch**, pick **`main`** and folder **`/ (root)`**, then **Save**.
+3. After a minute the card is live at
+   **`https://built4m3-dev.github.io/workflowauto/business-card/`** — exactly the
+   `cardUrl` the QR already uses. Scan it to confirm.
+
+Hosting elsewhere (Netlify, Cloudflare Pages, your own domain)? Just set
+`cardUrl` to that address and reload so the QR regenerates.
 
 ## 📲 Add to Home Screen (the free "shortcut")
 
